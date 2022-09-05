@@ -1,24 +1,116 @@
-swagger: '2.0'
+openapi: 3.0.3
 info:
-  version: 1.0.0
-  title: タイトル
+  title: comproblems
+  description: |-
+    競プロ問題投稿アプリ
+  version: 0.0.0
+servers:
+  - url: https://tqk.trap.show/comproblems
+tags:
+  - name: user
+    description: ユーザーに関する操作
 paths:
-  '/user/{id}':
-    get:
-      description: ユーザー情報取得
+  /user/signup:
+    post:
+      tags:
+        - user
+      summary: ユーザーを登録します
+      description: ""
+      operationId: signUpUser
       parameters:
-      - name: id
-        in: path
-        description: user id
-        required: true
-        type: number
+        - $ref: "#/components/parameters/usernameInQuery"
+        - $ref: "#/components/parameters/passwordInQuery"
       responses:
-        '200':
-          description: 成功
-          schema:
-            type: object
-            properties:
-              id:
-                type: integer
-              username:
-                type: string
+        "201":
+          description:
+            Created
+            ユーザーが作成されました
+        "400":
+          description:
+            Bad Request
+            ユーザー名やパスワードは空にできません
+        "409":
+          description:
+            Conflict
+            ユーザーはすでに存在します
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: ログインします
+      description: ""
+      operationId: loginUser
+      parameters:
+        - $ref: "#/components/parameters/usernameInQuery"
+        - $ref: "#/components/parameters/passwordInQuery"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description:
+            Ok
+            ログインしました
+        "403":
+          description:
+            Forbidden
+            ユーザー名かパスワードが違います
+  /user/logout:
+    delete:
+      tags:
+        - user
+      summary: ログアウトします
+      description: ""
+      operationId: logoutUser
+      parameters: []
+      responses:
+        "200":
+          description:
+            Ok
+            ログアウトしました
+components:
+  parameters:
+    usernameInQuery:
+      name: username
+      in: query
+      required: true
+      schema:
+        type: string
+    passwordInQuery:
+      name: password
+      in: query
+      required: true
+      schema:
+        type: string
+  schemas:
+    LoginRequest:
+      title: PostLoginRequest
+      type: object
+      description: "login request"
+      properties:
+        username: 
+          type: string
+          description: ""
+          example: tqk
+        password:
+          type: string
+          description: ""
+          example: password
+      required:
+        - username
+        - password
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
