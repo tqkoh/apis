@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
-  title: comproblems
-  description: |-
-    競プロ問題投稿アプリ
+  title: QK Judge
+  description:
+    休憩ジャッジ
   version: 0.0.0
 servers:
-  - url: https://tqk.trap.show/comproblems
+  - url: https://tqk.trap.show/qkjudge
 tags:
   - name: user
     description: ユーザーに関する操作
@@ -31,7 +31,7 @@ paths:
     post:
       tags:
         - user
-      summary: ユーザーを登録します
+      summary: ユーザーを登録します ✔️
       description: ""
       operationId: signup
       parameters: []
@@ -57,7 +57,7 @@ paths:
     post:
       tags:
         - user
-      summary: ログインします
+      summary: ログインします ✔️
       description: ""
       operationId: login
       parameters: []
@@ -79,7 +79,7 @@ paths:
     delete:
       tags:
         - user
-      summary: ログアウトします
+      summary: ログアウトします ✔️
       description: ""
       operationId: logout
       parameters: []
@@ -92,7 +92,7 @@ paths:
     get:
       tags:
         - user
-      summary: ログイン状態を返します
+      summary: ログイン状態を返します ✔️
       operationId: whoami
       parameters: []
       responses:
