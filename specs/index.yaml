@@ -12,7 +12,7 @@ tags:
   - name: problems
     description: 問題に関する操作
   - name: judge
-    description: 実行に関する操作
+    description: ジャッジに関する操作
 paths:
   /ping:
     get:
@@ -126,21 +126,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  problems:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        title:
-                          type: string
-                        author:
-                          type: string
-                        difficulty:
-                          type: integer
+                $ref: "#/components/schemas/getProblemResponse"
     post:
       tags:
         - problems
@@ -348,17 +334,58 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  output:
-                    type: string
-                    example: "11"
-          
-
-      
-    
-
-          
+                $ref: "#/components/schemas/postExecuteResponse"
+        "503":
+          description: 
+            Service Unavailable
+            実行上限数を超過しました
+                
+  /submit:
+    post:
+      tags:
+        - judge
+      summary: ジャッジします
+      operationId: postSubmit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postSubmitRequest"
+      responses:
+        "204":
+          description: No Content
+        "503":
+          description: 
+            Service Unavailable
+            実行上限数を超過しました
+  /submittions:
+    get:
+      tags:
+        - judge
+      summary: 提出一覧を返します
+      operationId: getSubmittions
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getSubmittionsResponse"
+  /submittions/{submittionId}:
+    get:
+      tags:
+        - judge
+      summary: 提出の内容を返します
+      operationId: getSubmittion
+      parameters:
+        - $ref: "#/components/parameters/submittionIdInPath"
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getSubmittionResponse"
 
 
             
@@ -382,9 +409,15 @@ components:
       required: true
       schema:
         type: integer
+    submittionIdInPath:
+      name: submittionId
+      in: path
+      description: 提出 id
+      required: true
+      schema:
+        type: integer
   schemas:
     postLoginRequest:
-      title: PostLoginRequest
       type: object
       properties:
         username: 
@@ -396,8 +429,23 @@ components:
       required:
         - username
         - password
+    getProblemResponse:
+      type: object
+      properties:
+        problems:
+          type: array
+          items:
+            type: object
+            properties:
+              problemId:
+                type: integer
+              title:
+                type: string
+              author:
+                type: string
+              difficulty:
+                type: integer
     postProblemRequest:
-      title: postProblemRequest
       type: object
       properties:
         title:
@@ -414,7 +462,6 @@ components:
         - difficulty
         - statement
     postTestcaseRequest:
-      title: postTestcaseRequest
       type: object
       properties:
         filename:
@@ -423,21 +470,7 @@ components:
         content:
           type: string
           example: "6 7"
-    postExecuteRequest:
-      title: postExecuteRequest
-      type: object
-      properties:
-        language:
-          type: string
-          example: "python3"
-        source:
-          type: string
-          example: "A, B = map(int, input().split())\nprint(A+B)"
-        input:
-          type: string
-          example: "6 7"
     putProblemRequest:
-      title: postProblemNewRequest
       type: object
       properties:
         title:
@@ -454,6 +487,76 @@ components:
         - title
         - difficulty
         - statement
+    postExecuteRequest:
+      type: object
+      properties:
+        language:
+          type: string
+          example: "python3"
+        source:
+          type: string
+          example: "A, B = map(int, input().split())\nprint(A+B)"
+        input:
+          type: string
+          example: "6 7"
+    postExecuteResponse:
+      type: object
+      properties:
+        output:
+          type: string
+          example: "11"
+    postSubmitRequest:
+      type: object
+      properties:
+        problemId:
+          type: string
+          example: 1
+        language:
+          type: string
+          example: "python3"
+        source:
+          type: string
+          example: "A, B = map(int, input().split())\nprint(A+B)"
+    getSubmittionsResponse:
+      type: object
+      properties:
+        submittions:
+          type: array
+          items:
+            type: object
+            properties:
+              submittionId:
+                type: integer
+                example: 100
+              problemId:
+                type: integer
+                example: 1
+              author:
+                type: string
+                example: tqk
+              result:
+                type: string
+                example: "1/5"
+    getSubmittionResponse:
+      type: object
+      properties:
+        author:
+          type: string
+          example: tqk
+        problemId:
+          type: integer
+          example: 1
+        language:
+          type: string
+          example: "python3"
+        source:
+          type: string
+          example: "A, B = map(int, input().split())\nprint(A+B)"
+        result:
+          type: string
+          example: "AC"
+        
+          
   securitySchemes:
     petstore_auth:
       type: oauth2
