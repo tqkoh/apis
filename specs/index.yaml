@@ -9,17 +9,34 @@ servers:
 tags:
   - name: user
     description: ユーザーに関する操作
+  - name: problem
+    description: 問題に関する操作
 paths:
+  /ping:
+    get:
+      summary: pong
+      operationId: ping
+      responses:
+        "200":
+          description: Ok
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
   /user/signup:
     post:
       tags:
         - user
       summary: ユーザーを登録します
       description: ""
-      operationId: signUpUser
-      parameters:
-        - $ref: "#/components/parameters/usernameInQuery"
-        - $ref: "#/components/parameters/passwordInQuery"
+      operationId: signup
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
       responses:
         "201":
           description:
@@ -39,10 +56,8 @@ paths:
         - user
       summary: ログインします
       description: ""
-      operationId: loginUser
-      parameters:
-        - $ref: "#/components/parameters/usernameInQuery"
-        - $ref: "#/components/parameters/passwordInQuery"
+      operationId: login
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -63,13 +78,158 @@ paths:
         - user
       summary: ログアウトします
       description: ""
-      operationId: logoutUser
+      operationId: logout
+      parameters: []
+      responses:
+        "204":
+          description:
+            No Content
+            ログアウトしました
+  /user/whoami:
+    get:
+      tags:
+        - user
+      summary: ログイン状態を返します
+      operationId: whoami
       parameters: []
       responses:
         "200":
           description:
             Ok
-            ログアウトしました
+            ログインしています
+          content:
+            application/json:
+              schema:
+                title: ログイン状態
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: ログイン中のユーザーのユーザー名
+        "403":
+          description: 
+            Forbidden
+            ログインしていません
+  /problem/new:
+    post:
+      tags:
+        - problems
+      summary: 新しい問題を投稿します
+      operationId: newProblem
+      parameters:
+        - $ref: "#/components/parameters/titleInQuery"
+        - $ref: "#/components/parameters/statementInQuery"
+        - $ref: "#/components/parameters/difficultyInQuery"
+      responses:
+        "201":
+          description:
+            Created
+            問題が作成されました
+        "400":
+          description:
+            Bad Request
+            不正な問題文です
+  /problems:
+    get:
+      tags:
+        - problems
+      summary: 問題一覧を返します
+      operationId: listProblems
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  problems:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        author:
+                          type: string
+                        difficulty:
+                          type: integer
+  /problems/{id}:
+    get:
+      tags:
+        - problems
+      summary: 問題の内容を返します
+      operationId: getProblem
+      parameters:
+        - $ref: "#/components/parameters/problemIdInQuery"
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  author:
+                    type: string
+                  difficulty:
+                    type: integer
+                  statement:
+                    type: string
+    put:
+      tags:
+        - problems
+      summary: 問題の内容を変更します
+      operationId: newProblem
+      parameters:
+        - $ref: "#/components/parameters/problemIdInQuery"
+        - $ref: "#/components/parameters/titleInQuery"
+        - $ref: "#/components/parameters/statementInQuery"
+        - $ref: "#/components/parameters/difficultyInQuery"
+      responses:
+        "200":
+          description:
+            Ok
+            変更されました
+        "400":
+          description:
+            Bad request
+        "403":
+          description:
+            Forbidden
+            権限がありません
+    delete:
+      tags:
+        - problems
+      summary: 問題を消去します
+      operationId: deleteProblem
+      parameters:
+        - $ref: "#/components/parameters/problemIdInQuery"
+      responses:
+        "204":
+          description: 
+            No Content
+            消去しました
+        "403":
+          description:
+            Forbidden
+            権限がありません
+            
+
+          
+
+
+            
+
+
+        
+
 components:
   parameters:
     usernameInQuery:
@@ -84,6 +244,34 @@ components:
       required: true
       schema:
         type: string
+    titleInQuery:
+      name: title
+      description: markdown
+      in: query
+      required: true
+      schema:
+        type: string
+    statementInQuery:
+      name: statement
+      description: markdown
+      in: query
+      required: true
+      schema:
+        type: string
+    difficultyInQuery:
+      name: difficulty
+      description: markdown
+      in: query
+      required: true
+      schema:
+        type: integer
+    problemIdInQuery:
+      name: "id"
+      in: path
+      description: 問題 id
+      required: true
+      schema:
+        type: integer
   schemas:
     LoginRequest:
       title: PostLoginRequest
