@@ -9,8 +9,10 @@ servers:
 tags:
   - name: user
     description: ユーザーに関する操作
-  - name: problem
+  - name: problems
     description: 問題に関する操作
+  - name: judge
+    description: 実行に関する操作
 paths:
   /ping:
     get:
@@ -24,6 +26,7 @@ paths:
               schema:
                 type: string
                 example: pong
+  
   /user/signup:
     post:
       tags:
@@ -36,7 +39,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: "#/components/schemas/postLoginRequest"
       responses:
         "201":
           description:
@@ -62,7 +65,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: "#/components/schemas/postLoginRequest"
       responses:
         "200":
           description:
@@ -110,25 +113,7 @@ paths:
           description: 
             Forbidden
             ログインしていません
-  /problem/new:
-    post:
-      tags:
-        - problems
-      summary: 新しい問題を投稿します
-      operationId: newProblem
-      parameters:
-        - $ref: "#/components/parameters/titleInQuery"
-        - $ref: "#/components/parameters/statementInQuery"
-        - $ref: "#/components/parameters/difficultyInQuery"
-      responses:
-        "201":
-          description:
-            Created
-            問題が作成されました
-        "400":
-          description:
-            Bad Request
-            不正な問題文です
+  
   /problems:
     get:
       tags:
@@ -156,14 +141,32 @@ paths:
                           type: string
                         difficulty:
                           type: integer
-  /problems/{id}:
+    post:
+      tags:
+        - problems
+      summary: 新しい問題を作成します
+      operationId: postProblem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postProblemRequest"
+      responses:
+        "201":
+          description:
+            Created
+            作成しました
+        "400":
+          description:
+            Bad Request
+  /problems/{problemId}:
     get:
       tags:
         - problems
       summary: 問題の内容を返します
       operationId: getProblem
       parameters:
-        - $ref: "#/components/parameters/problemIdInQuery"
+        - $ref: "#/components/parameters/problemIdInPath"
       responses:
         "200":
           description: Ok
@@ -186,12 +189,14 @@ paths:
       tags:
         - problems
       summary: 問題の内容を変更します
-      operationId: newProblem
+      operationId: newProblemproblemIdInPath
       parameters:
-        - $ref: "#/components/parameters/problemIdInQuery"
-        - $ref: "#/components/parameters/titleInQuery"
-        - $ref: "#/components/parameters/statementInQuery"
-        - $ref: "#/components/parameters/difficultyInQuery"
+        - $ref: "#/components/parameters/problemIdInPath"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/putProblemRequest"
       responses:
         "200":
           description:
@@ -207,10 +212,10 @@ paths:
     delete:
       tags:
         - problems
-      summary: 問題を消去します
+      summary: 問題を削除します
       operationId: deleteProblem
       parameters:
-        - $ref: "#/components/parameters/problemIdInQuery"
+        - $ref: "#/components/parameters/problemIdInPath"
       responses:
         "204":
           description: 
@@ -220,7 +225,138 @@ paths:
           description:
             Forbidden
             権限がありません
-            
+  /problems/{problemId}/testcases:
+    get:
+      tags:
+        - problems
+      summary: テストケース一覧を返します
+      operationId: getProblemTestcases
+      parameters:
+        - $ref: "#/components/parameters/problemIdInPath"
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filename:
+                    type: string
+        "403":
+          description:
+            Forbidden
+            権限がありません
+    post:
+      tags:
+        - problems
+      summary: 新しいテストケースを作成します
+      operationId: postTestcase
+      parameters:
+        - $ref: "#/components/parameters/problemIdInPath"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postTestcaseRequest"
+      responses:
+        "201":
+          description: 
+            Created
+            作成しました
+  /problems/{problemId}/testcases/{testcaseId}:
+    get:
+      tags:
+        - problems
+      summary: テストケースの内容を返します
+      operationId: getProblemTestcase
+      parameters:
+        - $ref: "#/components/parameters/problemIdInPath"
+        - $ref: "#/components/parameters/testcaseIdInPath"
+      
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+    put:
+      tags:
+        - problems
+      summary: テストケースの内容を変更します
+      operationId: getProblemTestcase
+      parameters:
+        - $ref: "#/components/parameters/problemIdInPath"
+        - $ref: "#/components/parameters/testcaseIdInPath"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postTestcaseRequest"
+      responses:
+        "200":
+          description: 
+            Ok
+            変更しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+        "403":
+          description: 
+            Forbidden
+            権限がありません
+    delete:
+      tags:
+        - problems
+      summary: テストケースを削除します
+      operationId: getProblemTestcase
+      parameters:
+        - $ref: "#/components/parameters/problemIdInPath"
+        - $ref: "#/components/parameters/testcaseIdInPath"
+      responses:
+        "204":
+          description:
+            No Content
+            削除しました
+        "403":
+          description: 
+            Forbidden
+            権限がありません
+
+  /execute:
+    post:
+      tags:
+        - judge
+      summary: 実行します
+      operationId: postExecute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postExecuteRequest"
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                    example: "11"
+          
+
+      
+    
 
           
 
@@ -232,63 +368,92 @@ paths:
 
 components:
   parameters:
-    usernameInQuery:
-      name: username
-      in: query
-      required: true
-      schema:
-        type: string
-    passwordInQuery:
-      name: password
-      in: query
-      required: true
-      schema:
-        type: string
-    titleInQuery:
-      name: title
-      description: markdown
-      in: query
-      required: true
-      schema:
-        type: string
-    statementInQuery:
-      name: statement
-      description: markdown
-      in: query
-      required: true
-      schema:
-        type: string
-    difficultyInQuery:
-      name: difficulty
-      description: markdown
-      in: query
-      required: true
-      schema:
-        type: integer
-    problemIdInQuery:
-      name: "id"
+    problemIdInPath:
+      name: problemId
       in: path
       description: 問題 id
       required: true
       schema:
         type: integer
+    testcaseIdInPath:
+      name: testcaseId
+      in: path
+      description: テストケース id
+      required: true
+      schema:
+        type: integer
   schemas:
-    LoginRequest:
+    postLoginRequest:
       title: PostLoginRequest
       type: object
-      description: "login request"
       properties:
         username: 
           type: string
-          description: ""
           example: tqk
         password:
           type: string
-          description: ""
           example: password
       required:
         - username
         - password
+    postProblemRequest:
+      title: postProblemRequest
+      type: object
+      properties:
+        title:
+          type: string
+          example: "A+B"
+        difficulty:
+          type: integer
+          example: 1
+        statement:
+          type: string
+          example: "# 問題文\n\n$A+B$ を出力してください。\n..."
+      required:
+        - title
+        - difficulty
+        - statement
+    postTestcaseRequest:
+      title: postTestcaseRequest
+      type: object
+      properties:
+        filename:
+          type: string
+          example: 0_sample_01.in
+        content:
+          type: string
+          example: "6 7"
+    postExecuteRequest:
+      title: postExecuteRequest
+      type: object
+      properties:
+        language:
+          type: string
+          example: "python3"
+        source:
+          type: string
+          example: "A, B = map(int, input().split())\nprint(A+B)"
+        input:
+          type: string
+          example: "6 7"
+    putProblemRequest:
+      title: postProblemNewRequest
+      type: object
+      properties:
+        title:
+          type: string
+          example: "A+B"
+        difficulty:
+          type: integer
+          example: 1
+        statement:
+          type: string
+          example: "# 問題文\n\n$A+B$ を出力してください。\n..."
+      required:
+        - problemId
+        - title
+        - difficulty
+        - statement
   securitySchemes:
     petstore_auth:
       type: oauth2
