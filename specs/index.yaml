@@ -1,9 +1,8 @@
 openapi: 3.0.3
 info:
   title: QK Judge
-  description:
-    休憩ジャッジ
-  version: 0.0.1
+  description: "休憩ジャッジ\n実装済み: ✔️"
+  version: 0.0.2
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -147,7 +146,7 @@ paths:
     post:
       tags:
         - problems
-      summary: 問題の情報を問題リポジトリから更新します
+      summary: 問題の情報を問題リポジトリから更新します unimplemented
       operationId: postProblemReload
       responses:
         "204":
@@ -172,7 +171,7 @@ paths:
     get:
       tags:
         - problems
-      summary: 問題の内容を返します 3
+      summary: 問題の内容を返します ✔️
       operationId: getProblem
       parameters:
         - $ref: "#/components/parameters/problemIdInPath"
@@ -221,7 +220,7 @@ paths:
     delete:
       tags:
         - problems
-      summary: 問題の登録を解除します
+      summary: 問題の登録を解除します unimplemented
       operationId: deleteProblem
       parameters:
         - $ref: "#/components/parameters/problemIdInPath"
@@ -234,111 +233,111 @@ paths:
           description:
             Forbidden
             権限がありません
-  /problems/{problem_id}/testcases:
-    get:
-      tags:
-        - problems
-      summary: テストケース一覧を返します
-      operationId: getProblemTestcases
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  filename:
-                    type: string
-        "403":
-          description:
-            Forbidden
-            権限がありません
-    post:
-      tags:
-        - problems
-      summary: 新しいテストケースを作成します
-      operationId: postTestcase
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postTestcaseRequest"
-      responses:
-        "201":
-          description: 
-            Created
-            作成しました
-  /problems/{problem_id}/testcases/{testcase_id}:
-    get:
-      tags:
-        - problems
-      summary: テストケースの内容を返します
-      operationId: getProblemTestcase
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-        - $ref: "#/components/parameters/testcaseIdInPath"
+  # /problems/{problem_id}/testcases:
+  #   get:
+  #     tags:
+  #       - problems
+  #     summary: テストケース一覧を返します
+  #     operationId: getProblemTestcases
+  #     parameters:
+  #       - $ref: "#/components/parameters/problemIdInPath"
+  #     responses:
+  #       "200":
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 filename:
+  #                   type: string
+  #       "403":
+  #         description:
+  #           Forbidden
+  #           権限がありません
+  #   post:
+  #     tags:
+  #       - problems
+  #     summary: 新しいテストケースを作成します
+  #     operationId: postTestcase
+  #     parameters:
+  #       - $ref: "#/components/parameters/problemIdInPath"
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/postTestcaseRequest"
+  #     responses:
+  #       "201":
+  #         description: 
+  #           Created
+  #           作成しました
+  # /problems/{problem_id}/testcases/{testcase_id}:
+  #   get:
+  #     tags:
+  #       - problems
+  #     summary: テストケースの内容を返します
+  #     operationId: getProblemTestcase
+  #     parameters:
+  #       - $ref: "#/components/parameters/problemIdInPath"
+  #       - $ref: "#/components/parameters/testcaseIdInPath"
       
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  content:
-                    type: string
-    put:
-      tags:
-        - problems
-      summary: テストケースの内容を変更します
-      operationId: getProblemTestcase
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-        - $ref: "#/components/parameters/testcaseIdInPath"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postTestcaseRequest"
-      responses:
-        "200":
-          description: 
-            Ok
-            変更しました
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  content:
-                    type: string
-        "403":
-          description: 
-            Forbidden
-            権限がありません
-    delete:
-      tags:
-        - problems
-      summary: テストケースを削除します
-      operationId: getProblemTestcase
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-        - $ref: "#/components/parameters/testcaseIdInPath"
-      responses:
-        "204":
-          description:
-            No Content
-            削除しました
-        "403":
-          description: 
-            Forbidden
-            権限がありません
+  #     responses:
+  #       "200":
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 content:
+  #                   type: string
+  #   put:
+  #     tags:
+  #       - problems
+  #     summary: テストケースの内容を変更します
+  #     operationId: getProblemTestcase
+  #     parameters:
+  #       - $ref: "#/components/parameters/problemIdInPath"
+  #       - $ref: "#/components/parameters/testcaseIdInPath"
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/postTestcaseRequest"
+  #     responses:
+  #       "200":
+  #         description: 
+  #           Ok
+  #           変更しました
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 content:
+  #                   type: string
+  #       "403":
+  #         description: 
+  #           Forbidden
+  #           権限がありません
+  #   delete:
+  #     tags:
+  #       - problems
+  #     summary: テストケースを削除します
+  #     operationId: getProblemTestcase
+  #     parameters:
+  #       - $ref: "#/components/parameters/problemIdInPath"
+  #       - $ref: "#/components/parameters/testcaseIdInPath"
+  #     responses:
+  #       "204":
+  #         description:
+  #           No Content
+  #           削除しました
+  #       "403":
+  #         description: 
+  #           Forbidden
+  #           権限がありません
 
   /execute:
     post:
@@ -358,7 +357,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/postExecuteResponse"
-        "503":
+        "429":
           description: 
             Service Unavailable
             実行上限数を超過しました
@@ -367,7 +366,7 @@ paths:
     post:
       tags:
         - judge
-      summary: ジャッジします 4
+      summary: 提出します unimplemented
       operationId: postSubmit
       requestBody:
         content:
@@ -377,15 +376,15 @@ paths:
       responses:
         "204":
           description: No Content
-        "503":
+        "429":
           description: 
-            Service Unavailable
+            Too Many Requests
             実行上限数を超過しました
   /submittions:
     get:
       tags:
         - judge
-      summary: 提出一覧を返します 5
+      summary: 提出一覧を返します unimplemented
       operationId: getSubmittions
       responses:
         "200":
@@ -398,7 +397,7 @@ paths:
     get:
       tags:
         - judge
-      summary: 提出の内容を返します 6
+      summary: 提出の内容を返します unimplemented
       operationId: getSubmittion
       parameters:
         - $ref: "#/components/parameters/submittionIdInPath"
