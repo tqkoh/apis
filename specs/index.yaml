@@ -117,7 +117,7 @@ paths:
     post:
       tags:
         - problems
-      summary: 新しい問題を作成します
+      summary: 新しい問題を登録します ✔️
       operationId: postProblemNew
       requestBody:
         content:
@@ -129,30 +129,37 @@ paths:
           description:
             Created
             作成しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  problem_id:
+                    type: number
         "400":
           description:
             Bad Request
+        "409":
+          description: 
+            Conflict
+            問題はすでに登録されています
   /problem/reload:
     post:
       tags:
         - problems
-      summary: 問題の情報を問題リポジトリから更新します 1
+      summary: 問題の情報を問題リポジトリから更新します
       operationId: postProblemReload
       responses:
-        "200":
+        "204":
           description:
-            Ok
+            No Content
             更新しました
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getProblemsResponse"
 
   /problems:
     get:
       tags:
         - problems
-      summary: 問題一覧を返します 2
+      summary: 問題一覧を返します ✔️
       operationId: listProblems
       responses:
         "200":
@@ -161,7 +168,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProblemsResponse"
-  /problems/{problemId}:
+  /problems/{problem_id}:
     get:
       tags:
         - problems
@@ -187,34 +194,34 @@ paths:
                     type: integer
                   statement:
                     type: string
-    put:
-      tags:
-        - problems
-      summary: 問題の内容を変更します
-      operationId: newProblemproblemIdInPath
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/putProblemRequest"
-      responses:
-        "200":
-          description:
-            Ok
-            変更されました
-        "400":
-          description:
-            Bad request
-        "403":
-          description:
-            Forbidden
-            権限がありません
+    # put:
+    #   tags:
+    #     - problems
+    #   summary: 問題の内容を変更します
+    #   operationId: newProblemproblemIdInPath
+    #   parameters:
+    #     - $ref: "#/components/parameters/problemIdInPath"
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: "#/components/schemas/putProblemRequest"
+    #   responses:
+    #     "200":
+    #       description:
+    #         Ok
+    #         変更されました
+    #     "400":
+    #       description:
+    #         Bad request
+    #     "403":
+    #       description:
+    #         Forbidden
+    #         権限がありません
     delete:
       tags:
         - problems
-      summary: 問題を削除します
+      summary: 問題の登録を解除します
       operationId: deleteProblem
       parameters:
         - $ref: "#/components/parameters/problemIdInPath"
@@ -222,12 +229,12 @@ paths:
         "204":
           description: 
             No Content
-            消去しました
+            解除しました
         "403":
           description:
             Forbidden
             権限がありません
-  /problems/{problemId}/testcases:
+  /problems/{problem_id}/testcases:
     get:
       tags:
         - problems
@@ -266,7 +273,7 @@ paths:
           description: 
             Created
             作成しました
-  /problems/{problemId}/testcases/{testcaseId}:
+  /problems/{problem_id}/testcases/{testcase_id}:
     get:
       tags:
         - problems
@@ -387,7 +394,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getSubmittionsResponse"
-  /submittions/{submittionId}:
+  /submittions/{submittion_id}:
     get:
       tags:
         - judge
@@ -412,21 +419,21 @@ paths:
 components:
   parameters:
     problemIdInPath:
-      name: problemId
+      name: problem_id
       in: path
       description: 問題 id
       required: true
       schema:
         type: integer
     testcaseIdInPath:
-      name: testcaseId
+      name: testcase_id
       in: path
       description: テストケース id
       required: true
       schema:
         type: integer
     submittionIdInPath:
-      name: submittionId
+      name: submittion_id
       in: path
       description: 提出 id
       required: true
@@ -453,7 +460,7 @@ components:
           items:
             type: object
             properties:
-              problemId:
+              problem_id:
                 type: integer
               title:
                 type: string
@@ -464,15 +471,9 @@ components:
     postProblemNewRequest:
       type: object
       properties:
-        title:
+        path:
           type: string
-          example: "A+B"
-        difficulty:
-          type: integer
-          example: 1
-        statement:
-          type: string
-          example: "# 問題文\n\n$A+B$ を出力してください。\n..."
+          example: "a_plus_b"
       required:
         - title
         - difficulty
@@ -499,7 +500,7 @@ components:
           type: string
           example: "# 問題文\n\n$A+B$ を出力してください。\n..."
       required:
-        - problemId
+        - problem_id
         - title
         - difficulty
         - statement
@@ -524,7 +525,7 @@ components:
     postSubmitRequest:
       type: object
       properties:
-        problemId:
+        problem_id:
           type: string
           example: 1
         language:
@@ -541,10 +542,10 @@ components:
           items:
             type: object
             properties:
-              submittionId:
+              submittion_id:
                 type: integer
                 example: 100
-              problemId:
+              problem_id:
                 type: integer
                 example: 1
               author:
@@ -559,7 +560,7 @@ components:
         author:
           type: string
           example: tqk
-        problemId:
+        problem_id:
           type: integer
           example: 1
         language:
