@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "休憩ジャッジ\n実装済み: ✔️"
-  version: 0.0.4
+  version: 0.0.6
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -134,7 +134,7 @@ paths:
                 type: object
                 properties:
                   problem_id:
-                    type: number
+                    type: integer
         "400":
           description:
             Bad Request
@@ -412,7 +412,22 @@ paths:
                 $ref: "#/components/schemas/getSubmittionResponse"
   # todo: /tasks/{task_id}: タスクの input, output, expected などをみるやつ
   # todo: /submissions でタスク id の配列を変えす progress_num のかわりに
-
+  /tasks/{task_id}:
+    get:
+      tags:
+        - judge
+      summary: タスクの内容を返します ✔️
+      operationId: getTask
+      parameters:
+        - $ref: "#/components/parameters/taskIdInPath"
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTaskResponse"
+        
 
             
 
@@ -450,6 +465,13 @@ components:
       schema:
         type: integer
         default: 1
+    taskIdInPath:
+      name: task_id
+      in: path
+      description: タスク id
+      required: true
+      schema:
+        type: integer
   schemas:
     postLoginRequest:
       type: object
@@ -581,7 +603,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
           example: 1
         date:
           type: string
@@ -595,9 +617,11 @@ components:
         testcase_num:
           type: integer
           example: 3
-        progress_num:
-          type: integer
-          example: 2
+        task_ids:
+          type: array
+          items:
+            type: integer
+            example: 10
         result:
           type: string
           example: "AC"
@@ -610,6 +634,34 @@ components:
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
+    getTaskResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        submission_id:
+          type: integer
+          example: 1
+        input:
+          type: string
+          example: "6 7"
+        output:
+          type: string
+          example: "13   "
+        expected:
+          type: string
+          example: "13\n"
+        result:
+          type: string
+          example: "AC"
+        memory:
+          type: string
+          example: "5000"
+        cpu_time:
+          type: string
+          example: "0.01"
+        
         
           
   securitySchemes:
