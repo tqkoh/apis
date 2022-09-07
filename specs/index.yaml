@@ -2,8 +2,8 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "休憩ジャッジ\n実装済み: ✔️"
-  version: 0.0.2
-servers:
+  version: 0.0.3
+  servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
   - name: user
@@ -366,7 +366,7 @@ paths:
     post:
       tags:
         - judge
-      summary: 提出します unimplemented
+      summary: 提出します ✔️
       operationId: postSubmit
       requestBody:
         content:
@@ -380,12 +380,14 @@ paths:
           description: 
             Too Many Requests
             実行上限数を超過しました
-  /submittions:
+  /submissions?{page}:
     get:
       tags:
         - judge
-      summary: 提出一覧を返します unimplemented
+      summary: 提出一覧を返します ✔️
       operationId: getSubmittions
+      parameters:
+        - $ref: "#/components/parameters/submissionsPageInQuery"
       responses:
         "200":
           description: Ok
@@ -393,14 +395,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getSubmittionsResponse"
-  /submittions/{submittion_id}:
+  /submissions/{submission_id}:
     get:
       tags:
         - judge
       summary: 提出の内容を返します unimplemented
       operationId: getSubmittion
       parameters:
-        - $ref: "#/components/parameters/submittionIdInPath"
+        - $ref: "#/components/parameters/submissionIdInPath"
       responses:
         "200":
           description: Ok
@@ -431,13 +433,21 @@ components:
       required: true
       schema:
         type: integer
-    submittionIdInPath:
-      name: submittion_id
+    submissionIdInPath:
+      name: submission_id
       in: path
       description: 提出 id
       required: true
       schema:
         type: integer
+    submissionsPageInQuery:
+      name: page
+      in: query
+      description: 提出一覧のページ
+      required: false
+      schema:
+        type: integer
+        default: 1
   schemas:
     postLoginRequest:
       type: object
@@ -536,12 +546,12 @@ components:
     getSubmittionsResponse:
       type: object
       properties:
-        submittions:
+        submissions:
           type: array
           items:
             type: object
             properties:
-              submittion_id:
+              submission_id:
                 type: integer
                 example: 100
               problem_id:
@@ -552,7 +562,10 @@ components:
                 example: tqk
               result:
                 type: string
-                example: "1/5"
+                example: "WJ"
+              language:
+                type: string
+                example: "python3"
     getSubmittionResponse:
       type: object
       properties:
