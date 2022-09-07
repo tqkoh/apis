@@ -2,8 +2,8 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "休憩ジャッジ\n実装済み: ✔️"
-  version: 0.0.3
-  servers:
+  version: 0.0.4
+servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
   - name: user
@@ -237,7 +237,7 @@ paths:
   #   get:
   #     tags:
   #       - problems
-  #     summary: テストケース一覧を返します
+  #     summary: テストケース一覧を返します unimplemented
   #     operationId: getProblemTestcases
   #     parameters:
   #       - $ref: "#/components/parameters/problemIdInPath"
@@ -276,7 +276,7 @@ paths:
   #   get:
   #     tags:
   #       - problems
-  #     summary: テストケースの内容を返します
+  #     summary: テストケースの内容を返します unimplemented
   #     operationId: getProblemTestcase
   #     parameters:
   #       - $ref: "#/components/parameters/problemIdInPath"
@@ -399,7 +399,7 @@ paths:
     get:
       tags:
         - judge
-      summary: 提出の内容を返します unimplemented
+      summary: 提出の内容を返します ✔️
       operationId: getSubmittion
       parameters:
         - $ref: "#/components/parameters/submissionIdInPath"
@@ -410,6 +410,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getSubmittionResponse"
+  # todo: /tasks/{task_id}: タスクの input, output, expected などをみるやつ
+  # todo: /submissions でタスク id の配列を変えす progress_num のかわりに
 
 
             
@@ -519,6 +521,9 @@ components:
         language:
           type: string
           example: "python3"
+        language_version:
+          type: string
+          example: "4"
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
@@ -540,6 +545,9 @@ components:
         language:
           type: string
           example: "python3"
+        language_version:
+          type: string
+          example: "4"
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
@@ -566,24 +574,42 @@ components:
               language:
                 type: string
                 example: "python3"
+              language_version:
+                type: string
+                example: "4"
     getSubmittionResponse:
       type: object
       properties:
+        id:
+          type: number
+          example: 1
+        date:
+          type: string
+          example: "2022-09-07 6:18:54.0"
         author:
           type: string
           example: tqk
         problem_id:
           type: integer
           example: 1
-        language:
-          type: string
-          example: "python3"
-        source:
-          type: string
-          example: "A, B = map(int, input().split())\nprint(A+B)"
+        testcase_num:
+          type: integer
+          example: 3
+        progress_num:
+          type: integer
+          example: 2
         result:
           type: string
           example: "AC"
+        language:
+          type: string
+          example: "python3"
+        language_version:
+          type: string
+          example: "4"
+        source:
+          type: string
+          example: "A, B = map(int, input().split())\nprint(A+B)"
         
           
   securitySchemes:
