@@ -112,42 +112,13 @@ paths:
           description: 
             Forbidden
             ログインしていません
-  /problem/new:
-    post:
-      tags:
-        - problems
-      summary: 新しい問題を登録します ✔️
-      operationId: postProblemNew
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postProblemNewRequest"
-      responses:
-        "201":
-          description:
-            Created
-            作成しました
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  problem_id:
-                    type: integer
-        "400":
-          description:
-            Bad Request
-        "409":
-          description: 
-            Conflict
-            問題はすでに登録されています
-  /problem/reload:
+    
+  /fetch/problems:
     post:
       tags:
         - problems
       summary: 問題の情報を問題リポジトリから更新します unimplemented
-      operationId: postProblemReload
+      operationId: postFetchProblems
       responses:
         "204":
           description:
@@ -167,6 +138,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProblemsResponse"
+    post:
+      tags:
+        - problems
+      summary: 新しい問題を登録します ✔️
+      operationId: postProblems
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postProblemsRequest"
+      responses:
+        "201":
+          description:
+            Created
+            作成しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  problem_id:
+                    type: integer
+        "400":
+          description:
+            Bad Request
+        "409":
+          description: 
+            Conflict
+            問題はすでに登録されています
   /problems/{problem_id}:
     get:
       tags:
@@ -501,7 +501,7 @@ components:
                 type: string
               difficulty:
                 type: integer
-    postProblemNewRequest:
+    postProblemsRequest:
       type: object
       properties:
         path:
