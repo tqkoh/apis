@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: QK Judge
-  description: "休憩ジャッジ\n実装済み: ✔️"
-  version: 0.0.6
+  description: "[QK Judge](https://judge.tqk.blue/)\n実装済み: ✔️"
+  version: 0.0.7
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -75,7 +75,7 @@ paths:
             Forbidden
             ユーザー名かパスワードが違います
   /user/logout:
-    delete:
+    post:
       tags:
         - user
       summary: ログアウトします ✔️
