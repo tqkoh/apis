@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️"
-  version: 0.1.1
+  version: 0.1.2
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -376,6 +376,10 @@ paths:
       responses:
         "204":
           description: No Content
+          content:
+            application/json:
+            schema:
+              $ref: "#/components/schemas/postSubmitResponse"
         "429":
           description: 
             Too Many Requests
@@ -567,6 +571,12 @@ components:
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
+    postSubmitResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 10
     getSubmittionsResponse:
       type: object
       properties:
