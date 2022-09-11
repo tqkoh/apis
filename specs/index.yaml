@@ -374,8 +374,10 @@ paths:
             schema:
               $ref: "#/components/schemas/postSubmitRequest"
       responses:
-        "204":
-          description: No Content
+        "200":
+          description:
+            Ok
+            提出しました
           content:
             application/json:
             schema:
