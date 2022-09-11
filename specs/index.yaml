@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: QK Judge
-  description: "[QK Judge](https://judge.tqk.blue/)\n実装済み: ✔️"
-  version: 0.0.7
+  description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️"
+  version: 0.1.0
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -540,12 +540,9 @@ components:
     postExecuteRequest:
       type: object
       properties:
-        language:
-          type: string
-          example: "python3"
-        language_version:
-          type: string
-          example: "4"
+        language_id:
+          type: number
+          example: 1
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
@@ -562,14 +559,11 @@ components:
       type: object
       properties:
         problem_id:
-          type: string
+          type: number
           example: 1
-        language:
-          type: string
-          example: "python3"
-        language_version:
-          type: string
-          example: "4"
+        language_id:
+          type: number
+          example: 1
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
@@ -593,12 +587,9 @@ components:
               result:
                 type: string
                 example: "WJ"
-              language:
-                type: string
-                example: "python3"
-              language_version:
-                type: string
-                example: "4"
+              language_id:
+                type: number
+                example: 1
     getSubmittionResponse:
       type: object
       properties:
@@ -625,12 +616,9 @@ components:
         result:
           type: string
           example: "AC"
-        language:
-          type: string
-          example: "python3"
-        language_version:
-          type: string
-          example: "4"
+        language_id:
+          type: number
+          example: 1
         source:
           type: string
           example: "A, B = map(int, input().split())\nprint(A+B)"
