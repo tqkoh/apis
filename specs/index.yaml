@@ -369,7 +369,7 @@ paths:
                 "429":
                     description: Too Many Requests
                         実行上限数を超過しました
-    /submissions?{page}:
+    /submissions?page={page}:
         get:
             tags:
                 - judge
