@@ -1,695 +1,673 @@
 openapi: 3.0.3
 info:
-  title: QK Judge
-  description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️"
-  version: 0.1.4
+    title: QK Judge
+    description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️"
+    version: 0.1.5
 servers:
-  - url: https://tqk.trap.show/qkjudge
+    - url: https://tqk.trap.show/qkjudge
 tags:
-  - name: user
-    description: ユーザーに関する操作
-  - name: problems
-    description: 問題に関する操作
-  - name: judge
-    description: ジャッジに関する操作
+    - name: user
+      description: ユーザーに関する操作
+    - name: problems
+      description: 問題に関する操作
+    - name: judge
+      description: ジャッジに関する操作
 paths:
-  /ping:
-    get:
-      summary: pong ✔️
-      operationId: ping
-      responses:
-        "200":
-          description: Ok
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: pong
-  
-  /user/signup:
-    post:
-      tags:
-        - user
-      summary: ユーザーを登録します ✔️
-      description: ""
-      operationId: signup
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postLoginRequest"
-      responses:
-        "201":
-          description:
-            Created
-            ユーザーが作成されました
-        "400":
-          description:
-            Bad Request
-            ユーザー名やパスワードは空にできません
-        "409":
-          description:
-            Conflict
-            ユーザーはすでに存在します
-  /user/login:
-    post:
-      tags:
-        - user
-      summary: ログインします ✔️
-      description: ""
-      operationId: login
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postLoginRequest"
-      responses:
-        "200":
-          description:
-            Ok
-            ログインしました
-        "403":
-          description:
-            Forbidden
-            ユーザー名かパスワードが違います
-  /user/logout:
-    post:
-      tags:
-        - user
-      summary: ログアウトします ✔️
-      description: ""
-      operationId: logout
-      parameters: []
-      responses:
-        "204":
-          description:
-            No Content
-            ログアウトしました
-  /user/whoami:
-    get:
-      tags:
-        - user
-      summary: ログイン状態を返します ✔️
-      operationId: whoami
-      parameters: []
-      responses:
-        "200":
-          description:
-            Ok
-            ログインしています
-          content:
-            application/json:
-              schema:
-                title: ログイン状態
-                type: object
-                properties:
-                  username:
-                    type: string
-                    description: ログイン中のユーザーのユーザー名
-        "403":
-          description: 
-            Forbidden
-            ログインしていません
-    
-  /fetch/problems:
-    post:
-      tags:
-        - problems
-      summary: 問題の情報を問題リポジトリから更新します unimplemented
-      operationId: postFetchProblems
-      responses:
-        "204":
-          description:
-            No Content
-            更新しました
+    /ping:
+        get:
+            summary: pong ✔️
+            operationId: ping
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        text/plain:
+                            schema:
+                                type: string
+                                example: pong
 
-  /problems:
-    get:
-      tags:
-        - problems
-      summary: 問題一覧を返します ✔️
-      operationId: listProblems
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getProblemsResponse"
-    post:
-      tags:
-        - problems
-      summary: 新しい問題を登録します ✔️
-      operationId: postProblems
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postProblemsRequest"
-      responses:
-        "201":
-          description:
-            Created
-            登録しました
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-        "400":
-          description:
-            Bad Request
-        "409":
-          description: 
-            Conflict
-            問題はすでに登録されています
-  /problems/{problem_id}:
-    get:
-      tags:
-        - problems
-      summary: 問題の内容を返します ✔️
-      operationId: getProblem
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  author:
-                    type: string
-                  difficulty:
-                    type: integer
-                  statement:
-                    type: string
-    # put:
-    #   tags:
-    #     - problems
-    #   summary: 問題の内容を変更します
-    #   operationId: newProblemproblemIdInPath
-    #   parameters:
-    #     - $ref: "#/components/parameters/problemIdInPath"
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           $ref: "#/components/schemas/putProblemRequest"
-    #   responses:
-    #     "200":
-    #       description:
-    #         Ok
-    #         変更されました
-    #     "400":
-    #       description:
-    #         Bad request
-    #     "403":
-    #       description:
-    #         Forbidden
-    #         権限がありません
-    delete:
-      tags:
-        - problems
-      summary: 問題の登録を解除します unimplemented
-      operationId: deleteProblem
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-      responses:
-        "204":
-          description: 
-            No Content
-            解除しました
-        "403":
-          description:
-            Forbidden
-            権限がありません
-  # /problems/{problem_id}/testcases:
-  #   get:
-  #     tags:
-  #       - problems
-  #     summary: テストケース一覧を返します unimplemented
-  #     operationId: getProblemTestcases
-  #     parameters:
-  #       - $ref: "#/components/parameters/problemIdInPath"
-  #     responses:
-  #       "200":
-  #         description: Ok
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 filename:
-  #                   type: string
-  #       "403":
-  #         description:
-  #           Forbidden
-  #           権限がありません
-  #   post:
-  #     tags:
-  #       - problems
-  #     summary: 新しいテストケースを作成します
-  #     operationId: postTestcase
-  #     parameters:
-  #       - $ref: "#/components/parameters/problemIdInPath"
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: "#/components/schemas/postTestcaseRequest"
-  #     responses:
-  #       "201":
-  #         description: 
-  #           Created
-  #           作成しました
-  # /problems/{problem_id}/testcases/{testcase_id}:
-  #   get:
-  #     tags:
-  #       - problems
-  #     summary: テストケースの内容を返します unimplemented
-  #     operationId: getProblemTestcase
-  #     parameters:
-  #       - $ref: "#/components/parameters/problemIdInPath"
-  #       - $ref: "#/components/parameters/testcaseIdInPath"
-      
-  #     responses:
-  #       "200":
-  #         description: Ok
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 content:
-  #                   type: string
-  #   put:
-  #     tags:
-  #       - problems
-  #     summary: テストケースの内容を変更します
-  #     operationId: getProblemTestcase
-  #     parameters:
-  #       - $ref: "#/components/parameters/problemIdInPath"
-  #       - $ref: "#/components/parameters/testcaseIdInPath"
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: "#/components/schemas/postTestcaseRequest"
-  #     responses:
-  #       "200":
-  #         description: 
-  #           Ok
-  #           変更しました
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 content:
-  #                   type: string
-  #       "403":
-  #         description: 
-  #           Forbidden
-  #           権限がありません
-  #   delete:
-  #     tags:
-  #       - problems
-  #     summary: テストケースを削除します
-  #     operationId: getProblemTestcase
-  #     parameters:
-  #       - $ref: "#/components/parameters/problemIdInPath"
-  #       - $ref: "#/components/parameters/testcaseIdInPath"
-  #     responses:
-  #       "204":
-  #         description:
-  #           No Content
-  #           削除しました
-  #       "403":
-  #         description: 
-  #           Forbidden
-  #           権限がありません
+    /user/signup:
+        post:
+            tags:
+                - user
+            summary: ユーザーを登録します ✔️
+            description: ""
+            operationId: signup
+            parameters: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/postLoginRequest"
+            responses:
+                "201":
+                    description: Created
+                        ユーザーが作成されました
+                "400":
+                    description: Bad Request
+                        ユーザー名やパスワードは空にできません
+                "409":
+                    description: Conflict
+                        ユーザーはすでに存在します
+    /user/login:
+        post:
+            tags:
+                - user
+            summary: ログインします ✔️
+            description: ""
+            operationId: login
+            parameters: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/postLoginRequest"
+            responses:
+                "200":
+                    description: Ok
+                        ログインしました
+                "403":
+                    description: Forbidden
+                        ユーザー名かパスワードが違います
+    /user/logout:
+        post:
+            tags:
+                - user
+            summary: ログアウトします ✔️
+            description: ""
+            operationId: logout
+            parameters: []
+            responses:
+                "204":
+                    description: No Content
+                        ログアウトしました
+    /user/whoami:
+        get:
+            tags:
+                - user
+            summary: ログイン状態を返します ✔️
+            operationId: whoami
+            parameters: []
+            responses:
+                "200":
+                    description: Ok
+                        ログインしています
+                    content:
+                        application/json:
+                            schema:
+                                title: ログイン状態
+                                type: object
+                                properties:
+                                    username:
+                                        type: string
+                                        description: ログイン中のユーザーのユーザー名
+                "403":
+                    description: Forbidden
+                        ログインしていません
 
-  /execute:
-    post:
-      tags:
-        - judge
-      summary: 実行します ✔️
-      operationId: postExecute
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postExecuteRequest"
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/postExecuteResponse"
-        "429":
-          description: 
-            Service Unavailable
-            実行上限数を超過しました
-                
-  /submit:
-    post:
-      tags:
-        - judge
-      summary: 提出します ✔️
-      operationId: postSubmit
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postSubmitRequest"
-      responses:
-        "200":
-          description:
-            Ok
-            提出しました
-          content:
-            application/json:
-            schema:
-              $ref: "#/components/schemas/postSubmitResponse"
-        "429":
-          description: 
-            Too Many Requests
-            実行上限数を超過しました
-  /submissions?{page}:
-    get:
-      tags:
-        - judge
-      summary: 提出一覧を返します ✔️
-      operationId: getSubmittions
-      parameters:
-        - $ref: "#/components/parameters/submissionsPageInQuery"
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getSubmittionsResponse"
-  /submissions/{submission_id}:
-    get:
-      tags:
-        - judge
-      summary: 提出の内容を返します ✔️
-      operationId: getSubmittion
-      parameters:
-        - $ref: "#/components/parameters/submissionIdInPath"
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getSubmittionResponse"
-  # todo: /tasks/{task_id}: タスクの input, output, expected などをみるやつ
-  # todo: /submissions でタスク id の配列を変えす progress_num のかわりに
-  /tasks/{task_id}:
-    get:
-      tags:
-        - judge
-      summary: タスクの内容を返します ✔️
-      operationId: getTask
-      parameters:
-        - $ref: "#/components/parameters/taskIdInPath"
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getTaskResponse"
-        
+    /fetch/problems:
+        post:
+            tags:
+                - problems
+            summary: 問題の情報を問題リポジトリから更新します unimplemented
+            operationId: postFetchProblems
+            responses:
+                "204":
+                    description: No Content
+                        更新しました
 
-            
+    /problems:
+        get:
+            tags:
+                - problems
+            summary: 問題一覧を返します ✔️
+            operationId: listProblems
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/getProblemsResponse"
+        post:
+            tags:
+                - problems
+            summary: 新しい問題を登録します ✔️
+            operationId: postProblems
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/postProblemsRequest"
+            responses:
+                "201":
+                    description: Created
+                        登録しました
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                "400":
+                    description: Bad Request
+                "409":
+                    description: Conflict
+                        問題はすでに登録されています
+    /problems/{problem_id}:
+        get:
+            tags:
+                - problems
+            summary: 問題の内容を返します ✔️
+            operationId: getProblem
+            parameters:
+                - $ref: "#/components/parameters/problemIdInPath"
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                    title:
+                                        type: string
+                                    author:
+                                        type: string
+                                    difficulty:
+                                        type: integer
+                                    statement:
+                                        type: string
+        # put:
+        #   tags:
+        #     - problems
+        #   summary: 問題の内容を変更します
+        #   operationId: newProblemproblemIdInPath
+        #   parameters:
+        #     - $ref: "#/components/parameters/problemIdInPath"
+        #   requestBody:
+        #     content:
+        #       application/json:
+        #         schema:
+        #           $ref: "#/components/schemas/putProblemRequest"
+        #   responses:
+        #     "200":
+        #       description:
+        #         Ok
+        #         変更されました
+        #     "400":
+        #       description:
+        #         Bad request
+        #     "403":
+        #       description:
+        #         Forbidden
+        #         権限がありません
+        delete:
+            tags:
+                - problems
+            summary: 問題の登録を解除します unimplemented
+            operationId: deleteProblem
+            parameters:
+                - $ref: "#/components/parameters/problemIdInPath"
+            responses:
+                "204":
+                    description: No Content
+                        解除しました
+                "403":
+                    description: Forbidden
+                        権限がありません
+    # /problems/{problem_id}/testcases:
+    #   get:
+    #     tags:
+    #       - problems
+    #     summary: テストケース一覧を返します unimplemented
+    #     operationId: getProblemTestcases
+    #     parameters:
+    #       - $ref: "#/components/parameters/problemIdInPath"
+    #     responses:
+    #       "200":
+    #         description: Ok
+    #         content:
+    #           application/json:
+    #             schema:
+    #               type: object
+    #               properties:
+    #                 filename:
+    #                   type: string
+    #       "403":
+    #         description:
+    #           Forbidden
+    #           権限がありません
+    #   post:
+    #     tags:
+    #       - problems
+    #     summary: 新しいテストケースを作成します
+    #     operationId: postTestcase
+    #     parameters:
+    #       - $ref: "#/components/parameters/problemIdInPath"
+    #     requestBody:
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/postTestcaseRequest"
+    #     responses:
+    #       "201":
+    #         description:
+    #           Created
+    #           作成しました
+    # /problems/{problem_id}/testcases/{testcase_id}:
+    #   get:
+    #     tags:
+    #       - problems
+    #     summary: テストケースの内容を返します unimplemented
+    #     operationId: getProblemTestcase
+    #     parameters:
+    #       - $ref: "#/components/parameters/problemIdInPath"
+    #       - $ref: "#/components/parameters/testcaseIdInPath"
 
+    #     responses:
+    #       "200":
+    #         description: Ok
+    #         content:
+    #           application/json:
+    #             schema:
+    #               type: object
+    #               properties:
+    #                 content:
+    #                   type: string
+    #   put:
+    #     tags:
+    #       - problems
+    #     summary: テストケースの内容を変更します
+    #     operationId: getProblemTestcase
+    #     parameters:
+    #       - $ref: "#/components/parameters/problemIdInPath"
+    #       - $ref: "#/components/parameters/testcaseIdInPath"
+    #     requestBody:
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/postTestcaseRequest"
+    #     responses:
+    #       "200":
+    #         description:
+    #           Ok
+    #           変更しました
+    #         content:
+    #           application/json:
+    #             schema:
+    #               type: object
+    #               properties:
+    #                 content:
+    #                   type: string
+    #       "403":
+    #         description:
+    #           Forbidden
+    #           権限がありません
+    #   delete:
+    #     tags:
+    #       - problems
+    #     summary: テストケースを削除します
+    #     operationId: getProblemTestcase
+    #     parameters:
+    #       - $ref: "#/components/parameters/problemIdInPath"
+    #       - $ref: "#/components/parameters/testcaseIdInPath"
+    #     responses:
+    #       "204":
+    #         description:
+    #           No Content
+    #           削除しました
+    #       "403":
+    #         description:
+    #           Forbidden
+    #           権限がありません
 
-        
+    /execute:
+        post:
+            tags:
+                - judge
+            summary: 実行します ✔️
+            operationId: postExecute
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/postExecuteRequest"
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/postExecuteResponse"
+                "429":
+                    description: Service Unavailable
+                        実行上限数を超過しました
+
+    /submit:
+        post:
+            tags:
+                - judge
+            summary: 提出します ✔️
+            operationId: postSubmit
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/postSubmitRequest"
+            responses:
+                "200":
+                    description: Ok
+                        提出しました
+                    content:
+                        application/json:
+                        schema:
+                            $ref: "#/components/schemas/postSubmitResponse"
+                "429":
+                    description: Too Many Requests
+                        実行上限数を超過しました
+    /submissions?{page}:
+        get:
+            tags:
+                - judge
+            summary: 提出一覧を返します ✔️
+            operationId: getSubmittions
+            parameters:
+                - $ref: "#/components/parameters/submissionsPageInQuery"
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/getSubmittionsResponse"
+    /submissions/{submission_id}:
+        get:
+            tags:
+                - judge
+            summary: 提出の内容を返します ✔️
+            operationId: getSubmittion
+            parameters:
+                - $ref: "#/components/parameters/submissionIdInPath"
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/getSubmittionResponse"
+    # todo: /tasks/{task_id}: タスクの input, output, expected などをみるやつ
+    # todo: /submissions でタスク id の配列を変えす progress_num のかわりに
+    /tasks/{task_id}:
+        get:
+            tags:
+                - judge
+            summary: タスクの内容を返します ✔️
+            operationId: getTask
+            parameters:
+                - $ref: "#/components/parameters/taskIdInPath"
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/getTaskResponse"
 
 components:
-  parameters:
-    problemIdInPath:
-      name: problem_id
-      in: path
-      description: 問題 id
-      required: true
-      schema:
-        type: integer
-    testcaseIdInPath:
-      name: testcase_id
-      in: path
-      description: テストケース id
-      required: true
-      schema:
-        type: integer
-    submissionIdInPath:
-      name: submission_id
-      in: path
-      description: 提出 id
-      required: true
-      schema:
-        type: integer
-    submissionsPageInQuery:
-      name: page
-      in: query
-      description: 提出一覧のページ
-      required: false
-      schema:
-        type: integer
-        default: 1
-    taskIdInPath:
-      name: task_id
-      in: path
-      description: タスク id
-      required: true
-      schema:
-        type: integer
-  schemas:
-    postLoginRequest:
-      type: object
-      properties:
-        username: 
-          type: string
-          example: tqk
-        password:
-          type: string
-          example: password
-      required:
-        - username
-        - password
-    getProblemsResponse:
-      type: object
-      properties:
-        problems:
-          type: array
-          items:
+    parameters:
+        problemIdInPath:
+            name: problem_id
+            in: path
+            description: 問題 id
+            required: true
+            schema:
+                type: integer
+        testcaseIdInPath:
+            name: testcase_id
+            in: path
+            description: テストケース id
+            required: true
+            schema:
+                type: integer
+        submissionIdInPath:
+            name: submission_id
+            in: path
+            description: 提出 id
+            required: true
+            schema:
+                type: integer
+        submissionsPageInQuery:
+            name: page
+            in: query
+            description: 提出一覧のページ
+            required: false
+            schema:
+                type: integer
+                default: 1
+        taskIdInPath:
+            name: task_id
+            in: path
+            description: タスク id
+            required: true
+            schema:
+                type: integer
+    schemas:
+        postLoginRequest:
             type: object
             properties:
-              id:
-                type: integer
-              title:
-                type: string
-              author:
-                type: string
-              difficulty:
-                type: integer
-    postProblemsRequest:
-      type: object
-      properties:
-        path:
-          type: string
-          example: "a_plus_b"
-      required:
-        - title
-        - difficulty
-        - statement
-    postTestcaseRequest:
-      type: object
-      properties:
-        filename:
-          type: string
-          example: 0_sample_01.in
-        content:
-          type: string
-          example: "6 7"
-    putProblemRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          example: "A+B"
-        difficulty:
-          type: integer
-          example: 1
-        statement:
-          type: string
-          example: "# 問題文\n\n$A+B$ を出力してください。\n..."
-      required:
-        - problem_id
-        - title
-        - difficulty
-        - statement
-    postExecuteRequest:
-      type: object
-      properties:
-        language_id:
-          type: number
-          example: 1
-        source:
-          type: string
-          example: "A, B = map(int, input().split())\nprint(A+B)"
-        input:
-          type: string
-          example: "6 7"
-    postExecuteResponse:
-      type: object
-      properties:
-        output:
-          type: string
-          example: "11"
-        status_code:
-          type: number
-          example: 200
-        memory:
-          type: string
-          example: "5000"
-        cpu_time:
-          type: string
-          example: "0.01"
-    postSubmitRequest:
-      type: object
-      properties:
-        problem_id:
-          type: number
-          example: 1
-        language_id:
-          type: number
-          example: 1
-        source:
-          type: string
-          example: "A, B = map(int, input().split())\nprint(A+B)"
-    postSubmitResponse:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 10
-    getSubmittionsResponse:
-      type: object
-      properties:
-        submissions:
-          type: array
-          items:
+                username:
+                    type: string
+                    example: tqk
+                password:
+                    type: string
+                    example: password
+            required:
+                - username
+                - password
+        getProblemsResponse:
             type: object
             properties:
-              id:
-                type: integer
-                example: 100
-              problem_id:
-                type: integer
-                example: 1
-              author:
-                type: string
-                example: tqk
-              result:
-                type: string
-                example: "WJ"
-              language_id:
-                type: number
-                example: 1
-    getSubmittionResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        date:
-          type: string
-          example: "2022-09-07 6:18:54.0"
-        author:
-          type: string
-          example: tqk
-        problem_id:
-          type: integer
-          example: 1
-        testcase_num:
-          type: integer
-          example: 3
-        tasks:
-          type: array
-          items:
+                problems:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                            title:
+                                type: string
+                            author:
+                                type: string
+                            difficulty:
+                                type: integer
+        postProblemsRequest:
             type: object
             properties:
-              id:
-                type: number
-                example: 0
-              result:
-                type: string
-                example: AC
+                path:
+                    type: string
+                    example: "a_plus_b"
+            required:
+                - title
+                - difficulty
+                - statement
+        postTestcaseRequest:
+            type: object
+            properties:
+                filename:
+                    type: string
+                    example: 0_sample_01.in
+                content:
+                    type: string
+                    example: "6 7"
+        putProblemRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                    example: "A+B"
+                difficulty:
+                    type: integer
+                    example: 1
+                statement:
+                    type: string
+                    example: "# 問題文\n\n$A+B$ を出力してください。\n..."
+            required:
+                - problem_id
+                - title
+                - difficulty
+                - statement
+        postExecuteRequest:
+            type: object
+            properties:
+                language_id:
+                    type: number
+                    example: 1
+                source:
+                    type: string
+                    example: "A, B = map(int, input().split())\nprint(A+B)"
+                input:
+                    type: string
+                    example: "6 7"
+        postExecuteResponse:
+            type: object
+            properties:
+                output:
+                    type: string
+                    example: "11"
+                status_code:
+                    type: number
+                    example: 200
+                result:
+                    type: string
+                    example: OK
+                memory:
+                    type: string
+                    example: "5000"
+                cpu_time:
+                    type: string
+                    example: "0.01"
+        postSubmitRequest:
+            type: object
+            properties:
+                problem_id:
+                    type: number
+                    example: 1
+                language_id:
+                    type: number
+                    example: 1
+                source:
+                    type: string
+                    example: "A, B = map(int, input().split())\nprint(A+B)"
+        postSubmitResponse:
+            type: object
+            properties:
+                id:
+                    type: number
+                    example: 10
+        getSubmittionsResponse:
+            type: object
+            properties:
+                submissions:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                example: 100
+                            problem_id:
+                                type: integer
+                                example: 1
+                            author:
+                                type: string
+                                example: tqk
+                            result:
+                                type: string
+                                example: "WJ"
+                            language_id:
+                                type: number
+                                example: 1
+        getSubmittionResponse:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    example: 1
+                date:
+                    type: string
+                    example: "2022-09-07 6:18:54.0"
+                author:
+                    type: string
+                    example: tqk
+                problem_id:
+                    type: integer
+                    example: 1
+                testcase_num:
+                    type: integer
+                    example: 3
+                tasks:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: number
+                                example: 0
+                            result:
+                                type: string
+                                example: AC
 
-        result:
-          type: string
-          example: "AC"
-        language_id:
-          type: number
-          example: 1
-        source:
-          type: string
-          example: "A, B = map(int, input().split())\nprint(A+B)"
-    getTaskResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 10
-        submission_id:
-          type: integer
-          example: 1
-        input:
-          type: string
-          example: "6 7"
-        output:
-          type: string
-          example: "13   "
-        expected:
-          type: string
-          example: "13\n"
-        result:
-          type: string
-          example: "AC"
-        memory:
-          type: string
-          example: "5000"
-        cpu_time:
-          type: string
-          example: "0.01"
-        
-        
-          
-  securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+                result:
+                    type: string
+                    example: "AC"
+                language_id:
+                    type: number
+                    example: 1
+                source:
+                    type: string
+                    example: "A, B = map(int, input().split())\nprint(A+B)"
+        getTaskResponse:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    example: 10
+                submission_id:
+                    type: integer
+                    example: 1
+                input:
+                    type: string
+                    example: "6 7"
+                output:
+                    type: string
+                    example: "13   "
+                expected:
+                    type: string
+                    example: "13\n"
+                result:
+                    type: string
+                    example: "AC"
+                memory:
+                    type: string
+                    example: "5000"
+                cpu_time:
+                    type: string
+                    example: "0.01"
+
+    securitySchemes:
+        petstore_auth:
+            type: oauth2
+            flows:
+                implicit:
+                    authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+                    scopes:
+                        write:pets: modify pets in your account
+                        read:pets: read your pets
+        api_key:
+            type: apiKey
+            name: api_key
+            in: header
