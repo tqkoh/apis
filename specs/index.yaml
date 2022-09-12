@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️"
-  version: 0.1.6
+  version: 0.1.7
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -169,18 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  title:
-                    type: string
-                  author:
-                    type: string
-                  difficulty:
-                    type: integer
-                  statement:
-                    type: string
+                - $ref: "#/components/schemas/getProblemResponse"
     # put:
     #   tags:
     #   - problems
@@ -484,6 +473,23 @@ components:
                 type: string
               difficulty:
                 type: integer
+    getProblemResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        difficulty:
+          type: integer
+        statement:
+          type: string
+        time_limit:
+          type: string
+        memory_limit:
+          type: string
     postProblemsRequest:
       type: object
       properties:
