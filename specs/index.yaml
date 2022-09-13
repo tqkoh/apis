@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️"
-  version: 0.1.7
+  version: 0.2.0
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -109,7 +109,7 @@ paths:
     post:
       tags:
         - problems
-      summary: 問題の情報を問題リポジトリから更新します unimplemented
+      summary: 問題の情報を問題リポジトリから更新します ✔️
       operationId: postFetchProblems
       responses:
         "204":
@@ -129,32 +129,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getProblemsResponse"
-    post:
-      tags:
-        - problems
-      summary: 新しい問題を登録します ✔️
-      operationId: postProblems
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postProblemsRequest"
-      responses:
-        "201":
-          description: Created
-            登録しました
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-        "400":
-          description: Bad Request
-        "409":
-          description: Conflict
-            問題はすでに登録されています
+    # post:
+    #   tags:
+    #     - problems
+    #   summary: 新しい問題を登録します ✔️
+    #   operationId: postProblems
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: "#/components/schemas/postProblemsRequest"
+    #   responses:
+    #     "201":
+    #       description: Created
+    #         登録しました
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             properties:
+    #               id:
+    #                 type: integer
+    #     "400":
+    #       description: Bad Request
+    #     "409":
+    #       description: Conflict
+    #         問題はすでに登録されています
   /problems/{problem_id}:
     get:
       tags:
@@ -169,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                - $ref: "#/components/schemas/getProblemResponse"
+                $ref: "#/components/schemas/getProblemResponse"
     # put:
     #   tags:
     #   - problems
@@ -194,20 +194,20 @@ paths:
     #     description:
     #     Forbidden
     #     権限がありません
-    delete:
-      tags:
-        - problems
-      summary: 問題の登録を解除します unimplemented
-      operationId: deleteProblem
-      parameters:
-        - $ref: "#/components/parameters/problemIdInPath"
-      responses:
-        "204":
-          description: No Content
-            解除しました
-        "403":
-          description: Forbidden
-            権限がありません
+    # delete:
+    #   tags:
+    #     - problems
+    #   summary: 問題の登録を解除します unimplemented
+    #   operationId: deleteProblem
+    #   parameters:
+    #     - $ref: "#/components/parameters/problemIdInPath"
+    #   responses:
+    #     "204":
+    #       description: No Content
+    #         解除しました
+    #     "403":
+    #       description: Forbidden
+    #         権限がありません
   # /problems/{problem_id}/testcases:
   #   get:
   #   tags:
