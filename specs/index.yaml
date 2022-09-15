@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: QK Judge
   description: "[QK Judge](https://judge.tqk.blue/)<br>[サポートされた言語、 language_id について](https://github.com/tqkoh/qkjudge-UI/blob/master/src/components/data/Languages.ts)<br>実装済み: ✔️<br>サーバー: [qkjudge](https://github.com/tqkoh/qkjudge)<br>クライアント: [qkjudge-UI](https://github.com/tqkoh/qkjudge-UI)<br>問題: [qkjudge-problems](https://github.com/tqkoh/qkjudge-problems)<br>"
-  version: 0.2.1
+  version: 0.3.0
 servers:
   - url: https://tqk.trap.show/qkjudge
 tags:
@@ -388,6 +388,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getSubmittionResponse"
+
+    put:
+      tags:
+        - judge
+      summary: 提出をリジャッジします unimplemented
+      operationId: putSubmission
+      parameters:
+        - $ref: "#/components/parameters/submissionIdInPath"
+      responses:
+        "204":
+          description: No Content リジャッジを始めました
+
   # todo: /tasks/{task_id}: タスクの input, output, expected などをみるやつ
   # todo: /submissions でタスク id の配列を変えす progress_num のかわりに
   /tasks/{task_id}:
@@ -471,12 +483,16 @@ components:
                 type: string
               author:
                 type: string
+                example: tqk
               difficulty:
                 type: integer
+                example: 100
               status:
                 type: string
+                example: NotAccepted
               last_submission:
                 type: integer
+                example: 2
     getProblemResponse:
       type: object
       properties:
