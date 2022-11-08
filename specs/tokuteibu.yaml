@@ -1,21 +1,87 @@
 openapi: 3.0.3
 info:
-    title: tokuteibu
-    description: "勝手に特定部 座席にアイコン描けるやつ みんなで編集できるやつ"
-    version: 0.0.0
+  title: tokuteibu
+  description: "勝手に特定部 座席にアイコン描けるやつ みんなで編集できるやつ"
+  version: 0.0.0
 servers:
-    - url: https://tqk.trap.show/tokuteibu
-      description: 予定
+  - url: https://tqk.trap.show/tokuteibu
+    description: 予定
 paths:
-    /ping:
-        get:
-            summary: pong
-            operationId: ping
-            responses:
-                "200":
-                    description: Ok
-                    content:
-                        text/plain:
-                            schema:
-                                type: string
-                                example: "pong"
+  /ping:
+    get:
+      summary: pong
+      operationId: ping
+      responses:
+        "200":
+          description: Ok
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "pong"
+  /events:
+    get:
+      summary: イベント一覧を取得する
+      operationId: getEvents
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: integer
+        - name: match
+          in: query
+          description: 検索
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "traPmtg_2022_1"
+    post:
+      summary: イベントを追加する
+      operationId: postEvents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "traPmtg_2022_1"
+      parameters: []
+      responses:
+        "200":
+          description: |
+            Ok
+            追加しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "traPmtg_2022_1"
+        "409":
+          description: |
+            Conflict
+            id はすでに使われています
+  /ws:
+    get:
+      description: |
+        websocket で接続します
+
+        ## ここに websocket プロトコルを書く
