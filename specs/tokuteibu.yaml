@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+    title: tokuteibu
+    description: "勝手に特定部 座席にアイコン描けるやつ みんなで編集できるやつ"
+    version: 0.0.0
+servers:
+    - url: https://tqk.trap.show/tokuteibu
+      description: 予定
+paths:
+    /ping:
+        get:
+            summary: pong
+            operationId: ping
+            responses:
+                "200":
+                    description: Ok
+                    content:
+                        text/plain:
+                            schema:
+                                type: string
+                                example: "pong"
