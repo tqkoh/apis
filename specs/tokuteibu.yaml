@@ -131,9 +131,8 @@ paths:
 
   /ws:
     get:
+      summary: websocket で接続する
       description: |
-        websocket で接続します
-
         # websocket プロトコル
 
         ## サーバーに送信
@@ -142,11 +141,11 @@ paths:
 
         例: `{"type":"START_EDITING","body":{"y":1,"x":3}}`
 
-        ### 一覧
+        ### 一覧と body の中身
 
         - `SET_VIEWING`: 見ているイベントを設定します
           - `id`: イベント id
-        - `SET_TITLE`: イベントのタイトルを設定します
+        - `SET_TITLE`: イベントのタイトルを設定します(作成者のみ)
           - `title`: タイトル
         - `START_EDITING`: セルの編集を始めます
           - `y`: y 座標 0 ≤ y < H
@@ -165,8 +164,10 @@ paths:
 
         例: `{"type":"START_EDITING","body":{"username":"@tqk","y":1,"x":3}}`
 
-        ### 一覧
+        ### 一覧と body の中身
 
+        - `SET_TITLE`: タイトルが変更されました
+          - `title`: タイトル
         - `START_EDITING`: セルが編集され始めました
           - `username`: 編集し始めたユーザー
           - `y`: y 座標 0 ≤ y < H
