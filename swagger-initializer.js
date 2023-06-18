@@ -13,6 +13,10 @@ window.onload = function () {
         url: "specs/tokuteibu.yaml",
         name: "tokuteibu",
       },
+      {
+        url: "specs/h23s_08_app.yaml",
+        name: "h23s_08_app",
+      }
     ],
     dom_id: "#swagger-ui",
     deepLinking: true,
