@@ -86,7 +86,7 @@ paths:
           description: |
             Created
             編集しました
-  /groups/details?id={group_id}:
+  /groups/details:
     get:
       summary: グループ詳細
       operationId: getGroupsDetails
